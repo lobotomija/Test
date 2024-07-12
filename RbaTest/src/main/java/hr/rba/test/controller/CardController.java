@@ -3,9 +3,10 @@ package hr.rba.test.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import hr.rba.test.dto.ErrorResponseDTO;
 import hr.rba.test.dto.OibAndStatusDTO;
-import hr.rba.test.dto.NewCardRequestDTO;
+import hr.rba.test.dto.CardRequestDTO;
 import hr.rba.test.dto.ResponseDTO;
-import hr.rba.test.service.NewCardService;
+import hr.rba.test.service.CardService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,69 +17,74 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @NoArgsConstructor
 @Slf4j
-@RequestMapping("/card_request")
-public class NewCardController {
+@RequestMapping("/card-request")
+public class CardController {
 
     @Autowired
-    NewCardService personService;
+    CardService cardService;
 
+    @Operation(summary = "Create a new card data", description = "Create a new card data with the provided details")
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<String> createPerson(@RequestBody NewCardRequestDTO newCardRequestDTO) {
-        LOGGER.info("Save person:" + newCardRequestDTO);
+    public ResponseEntity<String> createCard(@RequestBody CardRequestDTO cardRequestDTO) {
+        LOGGER.info("Save new card data:" + cardRequestDTO);
         try {
-            String result = new ObjectMapper().writeValueAsString(personService.insert(newCardRequestDTO));
+            String result = new ObjectMapper().writeValueAsString(cardService.insert(cardRequestDTO));
             return new ResponseEntity<>(new ObjectMapper().writeValueAsString(new ResponseDTO(result)), HttpStatus.CREATED);
         } catch (Exception e) {
-            LOGGER.error("Save person failed", e);
-            return getErrorResponseEntity("400", "0", "Save person failed");
+            LOGGER.error("Save new card data failed", e);
+            return getErrorResponseEntity("400", "0", "Save new card data failed");
         }
     }
 
-    @RequestMapping(path = "/find_all", method = RequestMethod.GET)
-    public ResponseEntity<String> listPersons() {
-        LOGGER.info("List persons");
+    @Operation(summary = "Find all card data", description = "FInd all card data")
+    @RequestMapping(path = "/find-all", method = RequestMethod.GET)
+    public ResponseEntity<String> listCards() {
+        LOGGER.info("List cards");
         try {
-            String result = new ObjectMapper().writeValueAsString(personService.findAll());
+            String result = new ObjectMapper().writeValueAsString(cardService.findAll());
             return new ResponseEntity<>(new ObjectMapper().writeValueAsString(new ResponseDTO(result)), HttpStatus.OK);
         } catch (Exception e) {
-            LOGGER.error("List persons failed", e);
-            return getErrorResponseEntity("404", "0", "Persons not found");
+            LOGGER.error("List cards failed", e);
+            return getErrorResponseEntity("404", "0", "Card data not found");
         }
     }
 
+    @Operation(summary = "Change status of card", description = "Change status of card given by oib of person")
     @RequestMapping(path = "/status", method = RequestMethod.PUT)
     public ResponseEntity<String> status(@RequestBody OibAndStatusDTO oibAndStatusDTO) {
-        LOGGER.info("Update person status with oib: " + oibAndStatusDTO.getOib());
+        LOGGER.info("Update card data status with oib: " + oibAndStatusDTO.getOib());
         try {
-            personService.updateStatusByOib(oibAndStatusDTO);
+            cardService.updateStatusByOib(oibAndStatusDTO);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
-            LOGGER.error("Update status person with oib " + oibAndStatusDTO.getOib() + " failed", e);
+            LOGGER.error("Update status card data with oib " + oibAndStatusDTO.getOib() + " failed", e);
             return getErrorResponseEntity("400", "0", "Oib not found");
         }
     }
 
+    @Operation(summary = "Delete a card", description = "Delete a card given by the oib")
     @DeleteMapping("/{oib}")
     public ResponseEntity<String> delete(@PathVariable String oib) {
-        LOGGER.info("Delete person with oib: " + oib);
+        LOGGER.info("Delete card data with oib: " + oib);
         try {
-            personService.deleteByOib(oib);
+            cardService.deleteByOib(oib);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
-            LOGGER.error("Delete person with oib " + oib + " failed", e);
+            LOGGER.error("Delete card data with oib " + oib + " failed", e);
             return getErrorResponseEntity("404", "0", "Oib not found");
         }
     }
 
+    @Operation(summary = "Search card data", description = "Search card data by oib")
     @GetMapping("/{oib}")
     public ResponseEntity<String> search(@PathVariable String oib) {
-        LOGGER.info("Search person with oib: " + oib);
+        LOGGER.info("Search card data for oib: " + oib);
 
         try {
-            String result = new ObjectMapper().writeValueAsString(personService.findByOib(oib));
+            String result = new ObjectMapper().writeValueAsString(cardService.findByOib(oib));
             return new ResponseEntity<>(new ObjectMapper().writeValueAsString(new ResponseDTO(result)), HttpStatus.OK);
         } catch (Exception e) {
-            LOGGER.error("Find person with oib " + oib + " failed", e);
+            LOGGER.error("Find card data for oib " + oib + " failed", e);
             return getErrorResponseEntity("404", "0", "Oib not found");
         }
     }

@@ -15,7 +15,7 @@ import { sendRequest } from '../utils/HttpRequest'
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 
-export interface NewCard
+export interface Card
 {
   firstName: string,
   lastName: string,
@@ -23,13 +23,13 @@ export interface NewCard
   status: string
 }
 
-export default function NewCardTable() {
-  let [newCards,setNewCards]=useState([])
+export default function CardTable() {
+  let [Cards,setCards]=useState([])
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [oib, setOib] = useState('');
   const [status, setStatus] = useState('');
-  const [newCard, setNewCard] = useState({
+  const [Card, setCard] = useState({
       firstName: '',
       lastName: '',
       oib: '',
@@ -37,24 +37,24 @@ export default function NewCardTable() {
     })
   const [open, setOpen] = useState(false);
 
-  async function handleNewCards() {
-    const {result, error} = await sendRequest('GET', null, process.env.REACT_APP_API_URL + '/card_request/find_all')
+  async function handleCards() {
+    const {result, error} = await sendRequest('GET', null, process.env.REACT_APP_API_URL + '/card-request/find-all')
     if(result != undefined) {
-        setNewCards(result)
+        setCards(result)
     } else if(error != undefined) {
-        setNewCards([]);
+        setCards([]);
         toast.error(error);
     }
   }
 
   const handleClickDelete = async (oib) =>{
     var shouldDelete = confirm(
-      "Do you really want to delete this newCard data?"
+      "Do you really want to delete this Card data?"
     );
 
     if (shouldDelete) {
-      const {result, error} = await sendRequest('DEL', null, process.env.REACT_APP_API_URL + '/card_request/' + oib)
-      handleNewCards();
+      const {result, error} = await sendRequest('DEL', null, process.env.REACT_APP_API_URL + '/card-request/' + oib)
+      handleCards();
       if(error != undefined) {
           toast.error(error);
       }
@@ -62,27 +62,27 @@ export default function NewCardTable() {
   }
 
   async function handleData() {
-    const {result, error} = await sendRequest('GET', null, process.env.REACT_APP_API_URL + '/card_request/' + oib)
+    const {result, error} = await sendRequest('GET', null, process.env.REACT_APP_API_URL + '/card-request/' + oib)
     if(result != undefined) {
         let array: any = [];
         array.push(result)
-        setNewCards(array)
+        setCards(array)
     } else if(error != undefined) {
-        setNewCards([]);
+        setCards([]);
         toast.error(error);
     }
   }
 
   const addDataSource = async () =>{
-    const newCardData: NewCard = {
+    const cardData: Card = {
       firstName: firstName,
       lastName: lastName,
       oib: oib,
       status: status
     }
-    const {result, error} = await sendRequest('POST', newCardData, process.env.REACT_APP_API_URL + '/card_request')
+    const {result, error} = await sendRequest('POST', cardData, process.env.REACT_APP_API_URL + '/card-request')
       if(result != undefined) {
-          handleNewCards()
+          handleCards()
           setOib('')
       } else if(error != undefined) {
           toast.error(error);
@@ -113,7 +113,7 @@ export default function NewCardTable() {
   }
 
     useOnceEffect(() => {
-      handleNewCards();
+      handleCards();
     })
 
 
@@ -218,7 +218,7 @@ export default function NewCardTable() {
               </Dialog>
     <Paper>
       <h1 style={{ textAlign: "center", color: "green" }}>
-          NewCards table
+          Cards table
       </h1>
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -231,19 +231,19 @@ export default function NewCardTable() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {newCards.map((newCard: NewCard) => (
+          {Cards.map((Card: Card) => (
             <StyledTableRow
-              key={newCard.oib}
+              key={Card.oib}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
               <TableCell scope="row">
-                {newCard.firstName}
+                {Card.firstName}
               </TableCell>
-              <TableCell align="right">{newCard.lastName}</TableCell>
-              <TableCell align="right">{newCard.oib}</TableCell>
-              <TableCell align="right">{newCard.status}</TableCell>
+              <TableCell align="right">{Card.lastName}</TableCell>
+              <TableCell align="right">{Card.oib}</TableCell>
+              <TableCell align="right">{Card.status}</TableCell>
                 <TableCell padding="checkbox">
-                   <Button onClick={() => handleClickDelete(newCard.oib)}>
+                   <Button onClick={() => handleClickDelete(Card.oib)}>
                     <CloseIcon />
                    </Button>
                 </TableCell>

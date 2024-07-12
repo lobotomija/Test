@@ -11,7 +11,7 @@ import java.io.Serializable;
 @Builder
 @Data
 @ToString
-public class NewCardRequestDTO implements Serializable {
+public class CardRequestDTO implements Serializable {
     private static final long serialVersionID = 1L;
 
     @JsonProperty("firstName")
