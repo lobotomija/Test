@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect} from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -29,16 +29,10 @@ export default function CardTable() {
   const [lastName, setLastName] = useState('');
   const [oib, setOib] = useState('');
   const [status, setStatus] = useState('');
-  const [Card, setCard] = useState({
-      firstName: '',
-      lastName: '',
-      oib: '',
-      status: '',
-    })
   const [open, setOpen] = useState(false);
 
   async function handleCards() {
-    const {result, error} = await sendRequest('GET', null, process.env.REACT_APP_API_URL + '/card-request/find-all')
+    const {result, error} = await sendRequest('GET', null, process.env['REACT_APP_API_URL'] + '/card-request/find-all')
     if(result != undefined) {
         setCards(result)
     } else if(error != undefined) {
@@ -47,13 +41,13 @@ export default function CardTable() {
     }
   }
 
-  const handleClickDelete = async (oib) =>{
+  const handleClickDelete = async (oib: string) =>{
     var shouldDelete = confirm(
       "Do you really want to delete this Card data?"
     );
 
     if (shouldDelete) {
-      const {result, error} = await sendRequest('DEL', null, process.env.REACT_APP_API_URL + '/card-request/' + oib)
+      const {error} = await sendRequest('DEL', null, process.env['REACT_APP_API_URL'] + '/card-request/' + oib)
       handleCards();
       if(error != undefined) {
           toast.error(error);
@@ -62,7 +56,7 @@ export default function CardTable() {
   }
 
   async function handleData() {
-    const {result, error} = await sendRequest('GET', null, process.env.REACT_APP_API_URL + '/card-request/' + oib)
+    const {result, error} = await sendRequest('GET', null, process.env['REACT_APP_API_URL'] + '/card-request/' + oib)
     if(result != undefined) {
         let array: any = [];
         array.push(result)
@@ -80,7 +74,7 @@ export default function CardTable() {
       oib: oib,
       status: status
     }
-    const {result, error} = await sendRequest('POST', cardData, process.env.REACT_APP_API_URL + '/card-request')
+    const {result, error} = await sendRequest('POST', cardData, process.env['REACT_APP_API_URL'] + '/card-request')
       if(result != undefined) {
           handleCards()
           setOib('')
@@ -100,40 +94,27 @@ export default function CardTable() {
     setOpen(true);
   }
 
-  const useOnceEffect = (effect) => {
-      const initialRef = useRef(true);
+  useEffect(() => {
+    handleCards();
+  }, []);
 
-      useEffect(() => {
-        if (!initialRef.current) {
-          return;
-        }
-        initialRef.current = false;
-        effect();
-      }, [effect]);
-  }
-
-    useOnceEffect(() => {
-      handleCards();
-    })
-
-
-  const handleParamFirstName = name => e => {
+  const handleParamFirstName = () => (e:any) => {
     setFirstName(e.target.value)
   }
 
-  const handleParamLastName = name => e => {
+  const handleParamLastName = () => (e:any) => {
     setLastName(e.target.value)
   }
 
-  const handleParamOIB = name => e => {
+  const handleParamOIB = () => (e:any) => {
     setOib(e.target.value)
   }
 
-  const handleParamStatus = name => e => {
+  const handleParamStatus = () => (e:any) => {
     setStatus(e.target.value)
   }
 
-  const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  const StyledTableRow = styled(TableRow)(() => ({
         '&:nth-of-type(odd)': {
           backgroundColor: "white",
         },
@@ -152,7 +133,7 @@ export default function CardTable() {
           label="OIB"
           type="text"
           value={oib || ''}
-          onChange={handleParamOIB('oib')}
+          onChange={handleParamOIB()}
           fullWidth
         />
         <Button variant="contained" color="primary" onClick={handleData}>
@@ -176,7 +157,7 @@ export default function CardTable() {
                         label="First name"
                         type="text"
                         value={firstName || ''}
-                        onChange={handleParamFirstName('firstName')}
+                        onChange={handleParamFirstName()}
                         fullWidth
                       />
                       <TextField
@@ -185,7 +166,7 @@ export default function CardTable() {
                         label="Last name"
                         type="text"
                         value={lastName || ''}
-                        onChange={handleParamLastName('lastName')}
+                        onChange={handleParamLastName()}
                         fullWidth
                       />
                       <TextField
@@ -194,7 +175,7 @@ export default function CardTable() {
                         label="OIB"
                         type="text"
                         value={oib || ''}
-                        onChange={handleParamOIB('oib')}
+                        onChange={handleParamOIB()}
                         fullWidth
                       />
                       <TextField
@@ -203,7 +184,7 @@ export default function CardTable() {
                         label="Status"
                         type="text"
                         value={status || ''}
-                        onChange={handleParamStatus('status')}
+                        onChange={handleParamStatus()}
                         fullWidth
                       />
                   </DialogContent>

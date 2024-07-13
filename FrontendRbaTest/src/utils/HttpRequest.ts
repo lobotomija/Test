@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export const sendRequest =  ( async (type, data, url) => {
+export const sendRequest =  ( async (type: string, data: object | null, url: string) => {
 
     let error;
     let result;
@@ -11,8 +11,8 @@ export const sendRequest =  ( async (type, data, url) => {
             let res = await axios.get(url)
             let st = await res.data;
             result = JSON.parse(st.message)
-        } catch(err) {
-            error = err.response.data.description !== undefined ? err.response.data.description : "Bad request";
+        } catch(err: any) {
+            error = err.response.data.description !== undefined ? err.response.data.description : err.response.data.error;
         }
     }
     else if(type == 'POST')
@@ -21,18 +21,18 @@ export const sendRequest =  ( async (type, data, url) => {
             let res = await axios.post(url, data)
             let st = await res.data;
             result = JSON.parse(st.message)
-        } catch(err) {
-            error = err.response.data.description !== undefined ? err.response.data.description : "Bad request";
+        } catch(err: any) {
+            error = err.response.data.description !== undefined ? err.response.data.description : err.response.data.error;
         }
     }
     else if(type == 'DEL')
     {
         try {
             let res = await axios.delete(url)
-            let st = await res.data;
+            await res.data;
             result = undefined
-        } catch(err) {
-            error = err.response.data.description !== undefined ? err.response.data.description : "Bad request";
+        } catch(err: any) {
+            error = err.response.data.description !== undefined ? err.response.data.description : err.response.data.error;
         }
     }
     else if(type == 'PUT')
@@ -41,8 +41,8 @@ export const sendRequest =  ( async (type, data, url) => {
             let res = await axios.put(url, data)
             let st = await res.data;
             result = JSON.parse(st.message)
-        } catch(err) {
-            error = err.response.data.description !== undefined ? err.response.data.description : "Bad request";
+        } catch(err: any) {
+            error = err.response.data.description !== undefined ? err.response.data.description : err.response.data.error;
         }
     }
 
