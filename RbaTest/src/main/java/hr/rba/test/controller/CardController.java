@@ -32,11 +32,11 @@ public class CardController {
             return new ResponseEntity<>(new ObjectMapper().writeValueAsString(new ResponseDTO(result)), HttpStatus.CREATED);
         } catch (Exception e) {
             LOGGER.error("Save new card data failed", e);
-            return getErrorResponseEntity("400", "0", "Save new card data failed");
+            return getErrorResponseEntity("400", "0", e.getMessage());
         }
     }
 
-    @Operation(summary = "Find all card data", description = "FInd all card data")
+    @Operation(summary = "Find all card data", description = "Find all card data")
     @RequestMapping(path = "/find-all", method = RequestMethod.GET)
     public ResponseEntity<String> listCards() {
         LOGGER.info("List cards");

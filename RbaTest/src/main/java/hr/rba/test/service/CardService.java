@@ -43,8 +43,8 @@ public class CardService implements ICardService {
 
         if (errors.hasErrors()) {
             StringBuilder sb = new StringBuilder();
-            errors.getAllErrors().forEach(error -> sb.append(error.getDefaultMessage()).append("\n"));
-            throw new IllegalArgumentException("Card is not valid: \n" + sb.toString());
+            errors.getAllErrors().forEach(error -> sb.append(error.getDefaultMessage()));
+            throw new IllegalArgumentException("Card is not valid: " + sb.toString());
         }
 
         return cardRequestDTO;

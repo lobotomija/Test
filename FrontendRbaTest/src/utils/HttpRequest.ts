@@ -12,7 +12,7 @@ export const sendRequest =  ( async (type, data, url) => {
             let st = await res.data;
             result = JSON.parse(st.message)
         } catch(err) {
-            error = err.description !== undefined ? err.description : "Bad request";
+            error = err.response.data.description !== undefined ? err.response.data.description : "Bad request";
         }
     }
     else if(type == 'POST')
@@ -22,7 +22,7 @@ export const sendRequest =  ( async (type, data, url) => {
             let st = await res.data;
             result = JSON.parse(st.message)
         } catch(err) {
-            error = err.description !== undefined ? err.description : "Bad request";
+            error = err.response.data.description !== undefined ? err.response.data.description : "Bad request";
         }
     }
     else if(type == 'DEL')
@@ -32,7 +32,7 @@ export const sendRequest =  ( async (type, data, url) => {
             let st = await res.data;
             result = undefined
         } catch(err) {
-            error = err.description !== undefined ? err.description : "Bad request";
+            error = err.response.data.description !== undefined ? err.response.data.description : "Bad request";
         }
     }
     else if(type == 'PUT')
@@ -42,7 +42,7 @@ export const sendRequest =  ( async (type, data, url) => {
             let st = await res.data;
             result = JSON.parse(st.message)
         } catch(err) {
-            error = err.description !== undefined ? err.description : "Bad request";
+            error = err.response.data.description !== undefined ? err.response.data.description : "Bad request";
         }
     }
 

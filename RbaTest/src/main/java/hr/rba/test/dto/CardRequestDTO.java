@@ -25,12 +25,11 @@ public class CardRequestDTO implements Serializable {
     private String lastName;
 
     @JsonProperty("oib")
-    @Size(max = 11)
+    @Size(max = 11, min = 11)
     @NonNull
     private String oib;
 
     @JsonProperty("status")
     @Size(max = 100)
-    @NonNull
     private String status;
 }

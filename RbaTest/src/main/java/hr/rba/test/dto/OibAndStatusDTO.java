@@ -15,12 +15,11 @@ public class OibAndStatusDTO implements Serializable {
     private static final long serialVersionID = 1L;
 
     @JsonProperty("oib")
-    @Size(max = 11)
+    @Size(max = 11, min = 11)
     @NonNull
     private String oib;
 
     @JsonProperty("status")
     @Size(max = 100)
-    @NonNull
     private String status;
 }
