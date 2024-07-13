@@ -10,9 +10,22 @@ import java.util.Properties;
 import java.util.concurrent.ExecutionException;
 
 @Slf4j
-public class KafkaTopicCreator {
+public class KafkaTopicCreator implements Runnable {
 
     public KafkaTopicCreator() {
+        Thread thread = new Thread(this);
+        thread.start();
+    }
+
+    @Override
+    public void run()
+    {
+        try {
+            Thread.sleep(5000);
+        } catch (Exception e) {
+
+        }
+
         // Kafka broker properties
         Properties props = new Properties();
         props.put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");

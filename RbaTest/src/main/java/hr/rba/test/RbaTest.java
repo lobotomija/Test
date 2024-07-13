@@ -46,7 +46,7 @@ public class RbaTest {
             URI homepage = new URI("http://localhost:8081/api/v1/swagger-ui.html");
             Desktop.getDesktop().browse(homepage);
         } catch (URISyntaxException | IOException e) {
-            e.printStackTrace();
+            LOGGER.error(e.getStackTrace().toString());
         }
     }
 
