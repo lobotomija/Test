@@ -1,15 +1,17 @@
 package hr.rba.test;
 
+import hr.rba.test.component.InitData;
+import hr.rba.test.kafka.KafkaStatusConsumer;
+import hr.rba.test.kafka.KafkaStatusProducer;
+import hr.rba.test.kafka.KafkaTopicCreator;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;
 import lombok.extern.slf4j.Slf4j;
-import org.springdoc.core.models.GroupedOpenApi;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
@@ -25,13 +27,16 @@ import java.net.URISyntaxException;
 @OpenAPIDefinition(info = @Info(title = "API Documentation", version = "1.0.0"))
 public class RbaTest {
 
-    @Autowired
-    private Environment env;
-
     public static void main(String[] args) {
-        new SpringApplicationBuilder()
+        ApplicationContext context = new SpringApplicationBuilder()
                 .sources(RbaTest.class)
                 .run(args);
+
+        if (!context.getEnvironment().acceptsProfiles("test")) {
+            new KafkaTopicCreator();
+            new KafkaStatusConsumer();
+            new KafkaStatusProducer();
+        }
         openHomePage();
     }
 
@@ -43,5 +48,13 @@ public class RbaTest {
         } catch (URISyntaxException | IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Bean
+    public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
+        return args -> {
+            InitData initData = ctx.getBean(InitData.class);
+            initData.initData();
+        };
     }
 }

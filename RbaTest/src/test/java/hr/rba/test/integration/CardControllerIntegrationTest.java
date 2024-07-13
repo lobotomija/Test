@@ -10,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.junit.Assert.assertTrue;
@@ -25,11 +26,11 @@ public class CardControllerIntegrationTest {
     private TestRestTemplate restTemplate;
 
     @Test
-    public void testCustomerCRUD() {
+    public void testCardCRUD() {
         CardRequestDTO cardRequestDTO = CardRequestDTO.builder()
                 .firstName("first")
                 .lastName("last")
-                .oib("12345678901")
+                .oib("12345678900")
                 .status("u izradi")
                 .build();
 
