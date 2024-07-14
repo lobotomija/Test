@@ -68,8 +68,8 @@ module.exports = {
     port: 8214,
     proxy: [
       {      
-        path: '/api/v1',
-        target: 'http://127.0.0.1:8081/api/v1',
+        path: '/v1',
+        target: 'http://127.0.0.1:8081/v1',
         changeOrigin: false,
         secure: false,
         onProxyReq: proxyReq => {
