@@ -22,7 +22,6 @@ import java.net.URISyntaxException;
 
 @Slf4j
 @EnableJpaRepositories("hr.rba.test.repository")
-@EnableScheduling
 @SpringBootApplication(scanBasePackages = {"hr.rba.test"})
 @OpenAPIDefinition(info = @Info(title = "API Documentation", version = "1.0.0"))
 public class RbaTest {
