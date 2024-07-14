@@ -57,7 +57,7 @@ public class KafkaStatusConsumer implements Runnable {
             for (ConsumerRecord<String, String> record : records) {
                 System.out.printf("Received record(key=%s value=%s) meta(partition=%d, offset=%d)\n",
                         record.key(), record.value(), record.partition(), record.offset());
-                String apiUrl = "http://localhost:8081/api/v1/card-request/status";
+                String apiUrl = "http://localhost:8081/v1/card-request/status";
                 CloseableHttpClient httpClient = HttpClients.createDefault();
 
                 try {
